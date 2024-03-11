@@ -3,15 +3,16 @@ import {
   Controller,
   Delete,
   Get,
-  Param,
-  ParseIntPipe,
   Patch,
   Post
 } from '@nestjs/common';
+import { ParamId } from 'src/decorators/param-id.decorator';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { UpdatePatchUserDTO } from './dto/update-patch-user.dto';
 import { UserService } from './user.service';
 
+// Pode ser usado no controller todo, ou unitariamente em rotas (Atualmente esta no main global)
+// @UseInterceptors(LogInterceptor)
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -27,20 +28,17 @@ export class UserController {
   }
 
   @Get(':id')
-  async listOne(@Param('id', ParseIntPipe) id) {
+  async listOne(@ParamId() id) {
     return this.userService.show(id);
   }
 
   @Patch(':id')
-  async updatePatch(
-    @Body() body: UpdatePatchUserDTO,
-    @Param('id', ParseIntPipe) id,
-  ) {
+  async updatePatch(@Body() body: UpdatePatchUserDTO, @ParamId() id) {
     return this.userService.update(id, body);
   }
 
   @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id) {
+  async delete(@ParamId() id) {
     return this.userService.delete(id);
   }
 }
