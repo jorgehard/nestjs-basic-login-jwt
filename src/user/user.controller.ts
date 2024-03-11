@@ -38,10 +38,12 @@ export class UserController {
   }
 
   @Patch(':id')
-  async updatePatch(@Body() body: UpdatePatchUserDTO, @Param('id', ParseIntPipe) id) {
-    return { body,id };
+  async updatePatch(
+    @Body() body: UpdatePatchUserDTO,
+    @Param('id', ParseIntPipe) id,
+  ) {
+    return { body, id };
   }
-
 
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id) {
