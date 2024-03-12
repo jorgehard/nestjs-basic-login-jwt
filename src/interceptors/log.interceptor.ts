@@ -21,6 +21,7 @@ export class LogInterceptor implements NestInterceptor {
       // After
       console.log(`URL: ${context.switchToHttp().getRequest().url}`);
       console.log(`Execução levou: ${Date.now() - dt} milisegundos.`);
+      //TO DO: Criar um serviço de log ligando o banco de dados
     }));
   }
 }

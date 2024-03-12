@@ -1,8 +1,9 @@
-/*
-https://docs.nestjs.com/guards#guards
-*/
-
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { AuthService } from 'src/modules/auth/auth.service';
 import { UserService } from 'src/modules/user/user.service';
 
@@ -12,22 +13,17 @@ export class AuthGuard implements CanActivate {
     private readonly authService: AuthService,
     private readonly userService: UserService,
   ) {}
-  async canActivate(
-    context: ExecutionContext,
-  ) {
+  async canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest();
     const { authorization } = request.headers;
 
+    //Verifica se o token é valido, do contrario ocorre o erro
     try {
-      const data = this.authService.checkToken(
-        (authorization ?? '').split(' ')[1],
-      );
-      request.token = data;
-
-      request.user = await this.userService.show(data.id);
+      request.token = this.authService.checkToken(authorization.split(' ')[1]);
+      request.user = await this.userService.show(request.token.id);
       return true;
     } catch (e) {
-      return false;
+      throw new UnauthorizedException('Token informado não é valido');
     }
   }
 }
