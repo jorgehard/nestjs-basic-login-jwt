@@ -3,8 +3,8 @@ https://docs.nestjs.com/guards#guards
 */
 
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { AuthService } from 'src/auth/auth.service';
-import { UserService } from 'src/user/user.service';
+import { AuthService } from 'src/modules/auth/auth.service';
+import { UserService } from 'src/modules/user/user.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
